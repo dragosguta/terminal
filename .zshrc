@@ -4,8 +4,8 @@
 #   Description:  This file holds all of the shell configurations for ZSH
 #
 #   Sections:
-#   0.   Plugins
-#   1.   Environment Configuration
+#   0.   Environment Configuration
+#   1.   Plugins
 #   2.   Make Terminal Better
 #   3.   Process Management
 #   4.   Networking
@@ -14,7 +14,19 @@
 #   ---------------------------------------------------------------------------
 
 #   -------------------------------
-#   0.  Plugins
+#   0.  ENVIRONMENT CONFIGURATION
+#   -------------------------------
+#   Add commonly used folders to $PATH
+    export PATH="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
+
+#   Specify default editor
+    export EDITOR=vim
+
+#   Set starship theme config
+    export STARSHIP_CONFIG=$HOME/.starship/config.toml
+
+#   -------------------------------
+#   1.  Plugins
 #   -------------------------------
 
 #   Syntax highlighting
@@ -31,18 +43,6 @@
 
 #   Terminal Key Bindings
     source $HOME/.zsh_plugins/key-bindings.zsh
-
-#   NVM
-    source $HOME/.zsh_plugins/zsh-nvm/zsh-nvm.plugin.zsh
-
-#   -------------------------------
-#   1.  ENVIRONMENT CONFIGURATION
-#   -------------------------------
-#   Add commonly used folders to $PATH
-    export PATH="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
-
-#   Specify default editor
-    export EDITOR=vim
 
 #   -------------------------------
 #   2.  MAKE TERMINAL BETTER
@@ -71,11 +71,11 @@
 #   Source zshrc after making changes
     alias sourcez='source ~/.zshrc'
 
-#   Start "starship" theme
+#   Add starship theme
     eval "$(starship init zsh)"
 
-#   Set time on right side
-    RPROMPT="%B%F{240}[%*]"
+#   Initialize node version manager
+    eval "$(fnm env --multi)"
 
 #   -------------------------------
 #   3.  Process Management
