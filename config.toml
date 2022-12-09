@@ -1,14 +1,95 @@
 # Don't print a new line at the start of the prompt
 add_newline = false
 
-# Disable the package module, hiding it from the prompt completely
-[package]
-disabled = true
+[line_break]
+disabled = false
 
-# Disable the AWS cloud region in prompt
 [aws]
-disabled = true
+symbol = "  "
 
-# [time]
-# disabled = false
-# format = "%T"
+[buf]
+symbol = " "
+
+[c]
+symbol = " "
+
+[conda]
+symbol = " "
+
+[dart]
+symbol = " "
+
+[directory]
+read_only = " "
+
+[docker_context]
+symbol = " "
+
+[elixir]
+symbol = " "
+
+[elm]
+symbol = " "
+
+[git_branch]
+symbol = " "
+
+[golang]
+symbol = " "
+
+[haskell]
+symbol = " "
+
+[hg_branch]
+symbol = " "
+
+[java]
+symbol = " "
+
+[julia]
+symbol = " "
+
+[lua]
+symbol = " "
+
+[memory_usage]
+symbol = " "
+
+[meson]
+symbol = "喝 "
+
+[nim]
+symbol = " "
+
+[nix_shell]
+symbol = " "
+
+[nodejs]
+symbol = " "
+
+[package]
+symbol = " "
+
+[python]
+symbol = " "
+
+[rlang]
+symbol = "ﳒ "
+
+[ruby]
+symbol = " "
+
+[rust]
+symbol = " "
+
+[scala]
+symbol = " "
+
+[spack]
+symbol = "🅢 "
+
+[time]
+disabled = false
+format = '[\[$time\]]($style) '
+use_12hr = true
+utc_time_offset = "-8"

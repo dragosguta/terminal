@@ -1,54 +1,28 @@
-
 #   ---------------------------------------------------------------------------
 #
 #   Description:  This file holds all of the shell configurations for ZSH
 #
 #   Sections:
-#   0.   Environment Configuration
-#   1.   Plugins
-#   2.   Make Terminal Better
-#   3.   Process Management
-#   4.   Networking
-#   5.   Extended Commands
+#   0.   Make Terminal Better
+#   1.   Process Management
+#   2.   Networking
+#   3.   Extended Commands
+#   4.   Environment Configuration
+#   5.   Plugins
 #
 #   ---------------------------------------------------------------------------
 
 #   -------------------------------
-#   0.  ENVIRONMENT CONFIGURATION
-#   -------------------------------
-#   Add commonly used folders to $PATH
-    export PATH="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
-
-#   Specify default editor
-    export EDITOR=vim
-
-#   Set starship theme config
-    export STARSHIP_CONFIG=$HOME/.starship/config.toml
-
-#   -------------------------------
-#   1.  Plugins
-#   -------------------------------
-
-#   Syntax highlighting
-    source $HOME/.zsh_plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.plugin.zsh
-
-#   Auto Suggestions
-    source $HOME/.zsh_plugins/zsh-autosuggestions/zsh-autosuggestions.plugin.zsh
-
-#   Enable ZSH history
-    source $HOME/.zsh_plugins/history.zsh
-
-#   Command Completion
-    source $HOME/.zsh_plugins/completion.zsh
-
-#   Terminal Key Bindings
-    source $HOME/.zsh_plugins/key-bindings.zsh
-
-#   -------------------------------
-#   2.  MAKE TERMINAL BETTER
+#   0.  MAKE TERMINAL BETTER
 #   -------------------------------
 #   Preferred 'ls' implementation
-    alias ls='ls -FGlAhp'
+#    alias ls='ls -FGlAhp'
+
+#   Use exa [https://github.com/ogham/exa] instead of ls
+    alias ls='exa -FGlah --group-directories-first --icons --level=2'
+
+#   Use zoxide indead of cd
+    alias cd='z'
 
 #   Preferred 'mkdir' implementation
     alias mkdir='mkdir -pv'
@@ -62,23 +36,17 @@
 #   Clear terminal display
     alias c='clear'
 
-#   Find executables
-    alias which='type -all'
-
 #   Opens current directory in MacOS Finder
     alias f='open -a Finder ./'
 
 #   Source zshrc after making changes
     alias sourcez='source ~/.zshrc'
 
-#   Add starship theme
-    eval "$(starship init zsh)"
-
-#   Initialize node version manager
-    eval "$(fnm env --multi)"
+#   Use bat [https://github.com/sharkdp/bat] instead of cat
+    alias cat='bat'
 
 #   -------------------------------
-#   3.  Process Management
+#   1.  Process Management
 #   -------------------------------
 
 #   Recommended 'top' invocation to minimize resources
@@ -89,15 +57,16 @@
     alias ttop="top -R -F -s 10 -o rsize"
 
 #   Find CPU hogs
-    alias cpu_hogs='ps wwaxr -o pid,stat,%cpu,time,command | head -10'
+    alias cpuHogs='ps wwaxr -o pid,stat,%cpu,time,command | head -10'
 
 #   Find memory hogs
     alias memHogsTop='top -l 1 -o rsize | head -20'
     alias memHogsPs='ps wwaxm -o pid,stat,vsize,rss,time,command | head -10'
 
 #   -------------------------------
-#   4.  NETWORKING
+#   2.  NETWORKING
 #   -------------------------------
+#   Display the current machine's IP address
     alias ip='echo -en \ - Public facing IP Address:\ ; curl ipecho.net/plain ; echo ; echo -en \ - Internal IP Address:\ ; ipconfig getifaddr en0'
 
 #   openPorts: All listening connections
@@ -113,40 +82,27 @@
     alias lsockT='sudo /usr/sbin/lsof -nP | grep TCP'
 
 #   ---------------------------------------
-#   5.  Extended Commands
+#   3.  Extended Commands
 #   ---------------------------------------
-#   Open VSCode
-    function code () { VSCODE_CWD="$PWD" open -n -b "com.microsoft.VSCode" --args $* ;}
-
-#   Initialize the completion system
-    autoload -Uz compinit
-
-#   Cache completion if nothing changed - faster startup time
-    typeset -i updated_at=$(date +'%j' -r ~/.zcompdump 2>/dev/null || stat -f '%Sm' -t '%j' ~/.zcompdump 2>/dev/null)
-    if [ $(date +'%j') != $updated_at ]; then
-      compinit -i
-    else
-      compinit -C -i
-    fi
-
-#   Enhanced form of menu completion called `menu selection'
-    zmodload -i zsh/complist
-
-#   File search functions
-    function f() { find . -iname "*$1*" ${@:2} }
-    function r() { grep "$1" ${@:2} -R . }
-
 #   Create a folder and move into it in one command
-    function mcd() { mkdir -p "$@" && cd "$_"; }
+    function mcd() {
+        mkdir -p "$@" && cd "$_";
+    }
 
 #   Moves a file to the MacOS trash
-    function trash() { command mv "$@" ~/.Trash ; }
+    function trash() {
+        command mv "$@" ~/.Trash ;
+    }
 
 #   Always list directory contents upon 'cd'
-    function cd() { builtin cd "$@"; ls; }
+    function cd() {
+        builtin cd "$@"; ls;
+    }
 
 #   Remind yourself of an alias (given some part of it)
-    function showa() { /usr/bin/grep --color=always -i -a1 $@ ~/.zshrc | grep -v '^\s*$'; }
+    function showa() {
+        /usr/bin/grep --color=always -i -a1 $@ ~/.zshrc | grep -v '^\s*$';
+    }
 
 #   Run docker inspect and view environment of a container
     function di() {
@@ -185,4 +141,46 @@
     }
 
 #   List processes owned by my user
-    function my_ps() { ps $@ -u $USER -o pid,%cpu,%mem,start,time,bsdtime,command ; }
+    function my_ps() {
+        ps $@ -u $USER -o pid,%cpu,%mem,start,time,bsdtime,command ;
+    }
+
+#   -------------------------------
+#   4.  ENVIRONMENT CONFIGURATION
+#   -------------------------------
+
+#   Specify default editor
+    export EDITOR=vim
+
+#   Set starship theme config
+    export STARSHIP_CONFIG=$HOME/.starship/config.toml
+
+#   Enable starship theme [https://github.com/starship/starship]
+    eval "$(starship init zsh)"
+
+#   Enable node version manager with fnm [https://github.com/Schniz/fnm]
+    eval "$(fnm env)"
+
+#   Enable zoxide [https://github.com/ajeetdsouza/zoxide]
+    eval "$(zoxide init zsh)"
+
+#   Enable fzf [https://github.com/junegunn/fzf#installation]
+    if [[ ! "$PATH" == */opt/homebrew/opt/fzf/bin* ]]; then
+    PATH="${PATH:+${PATH}:}/opt/homebrew/opt/fzf/bin"
+    fi
+
+    # Auto-completion
+    [[ $- == *i* ]] && source "/opt/homebrew/opt/fzf/shell/completion.zsh" 2> /dev/null
+
+    # Key bindings
+    source "/opt/homebrew/opt/fzf/shell/key-bindings.zsh"
+
+#   -------------------------------
+#   5.  Plugins
+#   -------------------------------
+
+#   Syntax highlighting [https://github.com/zsh-users/zsh-syntax-highlighting]
+    source ~/.zsh_plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.plugin.zsh
+
+#   Auto suggestions [https://github.com/zsh-users/zsh-autosuggestions]
+    source ~/.zsh_plugins/zsh-autosuggestions/zsh-autosuggestions.plugin.zsh
